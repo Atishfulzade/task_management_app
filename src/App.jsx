@@ -10,7 +10,6 @@ function App() {
     const savedTasks = localStorage.getItem("tasks");
     return savedTasks ? JSON.parse(savedTasks) : []; // Handle null properly
   });
-  console.log(localStorage.getItem("tasks"));
 
   return (
     <>

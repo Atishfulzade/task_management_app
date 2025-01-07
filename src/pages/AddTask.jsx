@@ -8,7 +8,6 @@ const AddTask = ({ tasks, setTasks }) => {
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
-  console.log(tasks);
 
   const addTask = (e) => {
     e.preventDefault();
