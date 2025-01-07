@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
-import AddTask from "./AddTaskComponent";
-import { useNavigate } from "react-router-dom";
 
 const TaskManagementApp = ({ tasks, setTasks }) => {
   const [selectedTasks, setSelectedTasks] = useState([]);
-  const navigate = useNavigate();
   const toggleTaskCompletion = (id) => {
     setTasks(
       tasks.map((task) =>
@@ -82,15 +79,7 @@ const TaskManagementApp = ({ tasks, setTasks }) => {
                 </span>
                 <button
                   onClick={() => deleteTask(task.id)}
-                  style={{
-                    padding: "5px 10px",
-                    fontSize: "14px",
-                    backgroundColor: "#dc3545",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "3px",
-                    cursor: "pointer",
-                  }}
+                  className="cursor-pointer px-5 text-white py-1 hover:bg-red-700 transition-all bg-red-600 rounded"
                 >
                   Delete
                 </button>
