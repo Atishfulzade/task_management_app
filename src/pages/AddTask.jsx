@@ -21,8 +21,8 @@ const AddTask = ({ tasks, setTasks }) => {
     if (newTask.trim() !== "") {
       setTasks([...tasks, { id: Date.now(), name: newTask, completed: false }]);
       setNewTask("");
+      toast.success("Task added successfully");
     }
-    toast.success("Task added successfully");
   };
 
   return (
