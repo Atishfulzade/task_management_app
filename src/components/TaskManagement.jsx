@@ -28,6 +28,8 @@ const TaskManagementApp = ({ tasks, setTasks }) => {
     setTasks(filterTask);
     return tasks;
   };
+  console.log(selectedTasks);
+
   return (
     <div className="w-full md:w-1/2 h-4/5 bg-white p-5 rounded shadow-lg flex flex-col items-center overflow-y-auto">
       {tasks.length > 0 ? (
@@ -47,12 +49,14 @@ const TaskManagementApp = ({ tasks, setTasks }) => {
                 Select All
               </p>
             </div>
-            <button
-              className=" px-3 py-2  border   rounded"
-              onClick={deleteSlectedTask}
-            >
-              Delete selected task
-            </button>
+            {tasks.some((task) => task.completed) && (
+              <button
+                className=" px-3 py-2  border   rounded"
+                onClick={deleteSlectedTask}
+              >
+                Delete selected task
+              </button>
+            )}
           </div>
           <ul className="w-full  list-none overflow-scroll">
             {tasks.map((task) => (
