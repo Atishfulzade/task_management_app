@@ -1,25 +1,10 @@
 import React, { useState, useEffect } from "react";
-import AddTask from "./AddTask";
+import AddTask from "./AddTaskComponent";
+import { useNavigate } from "react-router-dom";
 
-const TaskManagementApp = () => {
-  const [tasks, setTasks] = useState(() => {
-    const savedTasks = localStorage.getItem("tasks");
-    return savedTasks ? JSON.parse(savedTasks) : [];
-  });
-  const [newTask, setNewTask] = useState("");
-
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
-
-  const addTask = () => {
-    if (!newTask) alert("Please enter a task");
-    if (newTask.trim() !== "") {
-      setTasks([...tasks, { id: Date.now(), name: newTask, completed: false }]);
-      setNewTask("");
-    }
-  };
-
+const TaskManagementApp = ({ tasks, setTasks }) => {
+  const [selectedTasks, setSelectedTasks] = useState([]);
+  const navigate = useNavigate();
   const toggleTaskCompletion = (id) => {
     setTasks(
       tasks.map((task) =>
@@ -27,33 +12,68 @@ const TaskManagementApp = () => {
       )
     );
   };
-
+  const selectAllTask = () => {
+    let selectedAllTask = tasks.map((task) => {
+      task.completed = true;
+      return task;
+    });
+    setTasks(selectedAllTask);
+    setSelectedTasks(selectedAllTask);
+  };
   const deleteTask = (id) => {
     setTasks(tasks.filter((task) => task.id !== id));
   };
-
+  const deleteSlectedTask = () => {
+    let filterTask = tasks.filter((task) => !task.completed);
+    setTasks(filterTask);
+    return tasks;
+  };
   return (
-    <div className="flex justify-center flex-col p-10">
-      <h1 className="text-center font-sarif text-3xl font-extrabold text-slate-700">
-        Task Management App
-      </h1>
-      <AddTask addTask={addTask} newTask={newTask} setNewTask={setNewTask} />
-      <div>
-        {tasks.length > 0 ? (
-          <ul style={{ listStyleType: "none", padding: 0 }}>
+    <div className="w-full md:w-1/2 h-4/5 bg-white p-5 rounded shadow-lg flex flex-col items-center overflow-y-auto">
+      {tasks.length > 0 ? (
+        <>
+          <div className="flex gap-3 sticky top-0 bg-white  w-full justify-between py-3 items-center">
+            <div
+              className="flex justify-center cursor-pointer items-center gap-2 px-3 border py-1 rounded"
+              onClick={selectAllTask}
+            >
+              <input
+                type="checkbox"
+                id="select-all"
+                name="select-all"
+                checked={tasks.every((task) => task.completed)}
+              />
+              <p className="text-slate-700" name="select-all">
+                Select All
+              </p>
+            </div>
+            <button
+              className=" px-3 py-2  border   rounded"
+              onClick={deleteSlectedTask}
+            >
+              Delete selected task
+            </button>
+          </div>
+          <ul className="w-full  list-none overflow-scroll">
             {tasks.map((task) => (
               <li
                 key={task.id}
-                className={`flex justify-between md:w-[50%] items-center p-3 mb-3 rounded
+                className={`flex justify-between w-full items-center p-3 mb-3 rounded
                  ${task.completed ? "bg-green-100" : "bg-red-100"}`}
               >
                 <span
-                  onClick={() => toggleTaskCompletion(task.id)}
                   style={{
                     textDecoration: task.completed ? "line-through" : "none",
-                    cursor: "pointer",
                   }}
+                  className="flex gap-2 cursor-pointer text-xl font-medium"
                 >
+                  <input
+                    type="checkbox"
+                    className=""
+                    checked={task.completed}
+                    // value={task.completed}
+                    onClick={() => toggleTaskCompletion(task.id)}
+                  />
                   {task.name}
                 </span>
                 <button
@@ -73,10 +93,14 @@ const TaskManagementApp = () => {
               </li>
             ))}
           </ul>
-        ) : (
-          <p style={{ textAlign: "center" }}>No tasks added yet.</p>
-        )}
-      </div>
+        </>
+      ) : (
+        <div className="flex flex-col items-center justify-center h-full">
+          <p className="text-2xl mb-9 text-slate-800 font-bold ">
+            No tasks added yet.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
